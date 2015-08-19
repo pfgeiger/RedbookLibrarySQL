@@ -24,7 +24,7 @@ public class BookJdbcImpl implements IBook {
 		Connection con = null;
 		PreparedStatement ps = null;
 		try {
-			con = DataSourceManager.BOOK.getDs().getConnection();			
+			con = DataSourceManager.LIBRARY.getDs().getConnection();			
 			String sql = "INSERT INTO  book (id, name, description, quantity) VALUES(?,?,?,?)";
 			
 			ps = con.prepareStatement(sql);
@@ -53,7 +53,7 @@ public class BookJdbcImpl implements IBook {
 		Connection con = null;
 		PreparedStatement ps = null;
 		try {
-			con = DataSourceManager.BOOK.getDs().getConnection();			
+			con = DataSourceManager.LIBRARY.getDs().getConnection();			
 			String sql = "UPDATE book SET name=?, description=?, quantity=? WHERE id=?";			
 			ps = con.prepareStatement(sql);			
 			ps.setString(1, book.getName());
@@ -83,7 +83,7 @@ public class BookJdbcImpl implements IBook {
 		ResultSet rs = null;
 		Book b = null;
 		try {
-			con = DataSourceManager.BOOK.getDs().getConnection();			
+			con = DataSourceManager.LIBRARY.getDs().getConnection();			
 			String sql = "SELECT * from book WHERE id=?";			
 			ps = con.prepareStatement(sql);			
 			ps.setString(1, id);			
@@ -129,7 +129,7 @@ public class BookJdbcImpl implements IBook {
 		Connection con = null;
 		PreparedStatement ps = null;		
 		try {
-			con = DataSourceManager.BOOK.getDs().getConnection();			
+			con = DataSourceManager.LIBRARY.getDs().getConnection();			
 			String sql = "DELETE from book WHERE id=?";			
 			ps = con.prepareStatement(sql);			
 			ps.setString(1, id);			

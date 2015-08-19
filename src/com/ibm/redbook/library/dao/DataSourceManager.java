@@ -1,19 +1,19 @@
 package com.ibm.redbook.library.dao;
 
-import javax.naming.Context;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import com.ibm.redbook.library.exceptions.DataSourceException;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 
 /**
  * Convenience class used to get access to the different data sources used in the application.
  */
 public enum DataSourceManager {
-	BOOK("DefaultDatasource"), MEMBER("jdbc/Members"), STYLE("style");
+	LIBRARY("jdbc/library_db");
 	Logger log = Logger.getLogger(getClass().getName());
 	private String dsName = "";
 
@@ -31,11 +31,9 @@ public enum DataSourceManager {
 		InitialContext initContext = null;
 		try {
 			initContext = new InitialContext();
-			Context env = (Context) initContext.lookup("java:comp/env");
-			//$ANALYSIS-IGNORE
-			ds = (javax.sql.DataSource) env.lookup(dsName);
+			ds = (DataSource) initContext.lookup("java:comp/env/" + dsName);
 		} catch (NamingException e) {
-			log.log(Level.SEVERE, "failed to get the context. Error: " + e.getMessage(), e);
+			log.log(Level.SEVERE, "failed to get the datasource. Error: " + e.getMessage(), e);
 			throw new DataSourceException("Failed to get a datasource for "
 					+ dsName, e);
 		}

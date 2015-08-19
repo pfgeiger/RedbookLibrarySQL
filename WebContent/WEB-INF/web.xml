@@ -29,6 +29,13 @@
 		<servlet-name>PopulateTestData</servlet-name>
 		<servlet-class>com.ibm.redbook.library.web.PopulateTestData</servlet-class>
 	</servlet>
+	<servlet>
+		<description>Dumps the contents of the database for debugging purposes
+		</description>
+		<display-name>DumpTables</display-name>
+		<servlet-name>DumpTables</servlet-name>
+		<servlet-class>com.ibm.redbook.library.web.DumpTables</servlet-class>
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>BuildDatabases</servlet-name>
@@ -42,23 +49,11 @@
 		<servlet-name>PopulateTestData</servlet-name>
 		<url-pattern>/test/PopulateTestData</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>DumpTables</servlet-name>
+		<url-pattern>/test/DumpTables</url-pattern>
+	</servlet-mapping>
 
-	<security-constraint>
-		<web-resource-collection>
-			<web-resource-name>TestRole</web-resource-name>
-			<url-pattern>/test/*</url-pattern>
-		</web-resource-collection>
-		<auth-constraint>
-			<role-name>Test</role-name>
-		</auth-constraint>
-	</security-constraint>
-
-	<login-config>
-		<auth-method>BASIC</auth-method>
-	</login-config>
-	<security-role>
-		<role-name>Test</role-name>
-	</security-role>
 	<env-entry>
 		<env-entry-name>inTesting</env-entry-name>
 		<env-entry-type>java.lang.String</env-entry-type>
@@ -66,22 +61,7 @@
 	</env-entry>
 
 	<resource-ref id="MembersDataSource">
-		<description>Derby database Redbook Members Demo app</description>
-		<res-ref-name>jdbc/Members</res-ref-name>
-		<res-type>javax.sql.DataSource</res-type>
-		<res-auth>Container</res-auth>
-		<res-sharing-scope>Shareable</res-sharing-scope>
-	</resource-ref>
-	<resource-ref>
-		<description>
-		Derby database Demo Tomcat Book App</description>
-		<res-ref-name>DefaultDatasource</res-ref-name>
-		<res-type>javax.sql.DataSource</res-type>
-		<res-auth>Container</res-auth>
-		<res-sharing-scope>Shareable</res-sharing-scope>
-	</resource-ref>
-	<resource-ref>
-		<res-ref-name>style</res-ref-name>
+		<res-ref-name>jdbc/library_db</res-ref-name>
 		<res-type>javax.sql.DataSource</res-type>
 		<res-auth>Container</res-auth>
 		<res-sharing-scope>Shareable</res-sharing-scope>

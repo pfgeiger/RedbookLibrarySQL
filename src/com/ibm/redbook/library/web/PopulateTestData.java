@@ -25,12 +25,12 @@ public class PopulateTestData extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-			log.log(Level.INFO, "init db request");
+			log.log(Level.INFO, "populate db request");
 			try{
-				DatabaseTestDataUtil.populateMemberDatabase(DataSourceManager.MEMBER.getDs());
-				DatabaseTestDataUtil.populateStyleDatabase(DataSourceManager.STYLE.getDs());
-				DatabaseTestDataUtil.populateBookDatabase(DataSourceManager.BOOK.getDs());
-				request.setAttribute(WebAttributes.RETURN_MESSAGE.toString(), "Databases created." );
+				DatabaseTestDataUtil.populateMemberDatabase(DataSourceManager.LIBRARY.getDs());
+				DatabaseTestDataUtil.populateStyleDatabase(DataSourceManager.LIBRARY.getDs());
+				DatabaseTestDataUtil.populateBookDatabase(DataSourceManager.LIBRARY.getDs());
+				request.setAttribute(WebAttributes.RETURN_MESSAGE.toString(), "Databases populated." );
 			}catch (Exception e){
 				log.log(Level.SEVERE, e.getMessage(), e);
 				request.setAttribute(WebAttributes.RETURN_MESSAGE.toString(), "Error returned from populating databases");

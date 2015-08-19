@@ -25,7 +25,7 @@ public class MembersJdbcImpl implements IMember {
 		Connection con = null;
 		PreparedStatement ps = null;
 		try {
-			con = DataSourceManager.MEMBER.getDs().getConnection();
+			con = DataSourceManager.LIBRARY.getDs().getConnection();
 			String sql = "INSERT INTO  member (id, password) VALUES(?,?)";
 
 			ps = con.prepareStatement(sql);
@@ -58,7 +58,7 @@ public class MembersJdbcImpl implements IMember {
 		PreparedStatement stylePs = null;
 		ResultSet rs = null;
 		try {
-			memberCon = DataSourceManager.MEMBER.getDs().getConnection();
+			memberCon = DataSourceManager.LIBRARY.getDs().getConnection();
 			String sql = "UPDATE member SET password=? WHERE id=?";
 			ps = memberCon.prepareStatement(sql);
 			ps.setString(1, member.getPassword());
@@ -79,7 +79,7 @@ public class MembersJdbcImpl implements IMember {
 
 		try {
 			String sql = "DELETE from borrowed_list WHERE member_id=?";
-			bookCon = DataSourceManager.BOOK.getDs().getConnection();
+			bookCon = DataSourceManager.LIBRARY.getDs().getConnection();
 			ps = bookCon.prepareStatement(sql);
 			ps.setString(1, member.getMemberId());
 			ps.executeUpdate();
@@ -105,7 +105,7 @@ public class MembersJdbcImpl implements IMember {
 			}
 		}
 		try {
-			styleCon = DataSourceManager.STYLE.getDs().getConnection();
+			styleCon = DataSourceManager.LIBRARY.getDs().getConnection();
 			// First we need to see if the user exists
 			sql = "SELECT * FROM style WHERE member_id=?";
 			stylePs = styleCon.prepareStatement(sql);
@@ -134,8 +134,9 @@ public class MembersJdbcImpl implements IMember {
 					+ member.getMemberId() + ", error: " + e.getMessage(), e);
 		} finally {
 			JdbcUtils.closeConnectionAndPS(styleCon, stylePs);
+			JdbcUtils.closeConnectionAndPS(memberCon, ps);
 		}
-		JdbcUtils.closeConnectionAndPS(memberCon, ps);
+
 		return member;
 	}
 
@@ -146,12 +147,12 @@ public class MembersJdbcImpl implements IMember {
 		Connection memberCon = null;
 		Connection styleCon = null;
 		PreparedStatement memberPs = null;
+		PreparedStatement stylePs = null;
 		ResultSet rs = null;
 		Member m = null;
 		String sql = "";
-		PreparedStatement stylePs = null;
 		try {
-			memberCon = DataSourceManager.MEMBER.getDs().getConnection();
+			memberCon = DataSourceManager.LIBRARY.getDs().getConnection();
 			sql = "SELECT * from member WHERE id=?";
 			memberPs = memberCon.prepareStatement(sql);
 			memberPs.setString(1, id);
@@ -162,27 +163,30 @@ public class MembersJdbcImpl implements IMember {
 				m.setPassword(rs.getString("password"));
 				try {
 					sql = "SELECT * from borrowed_list WHERE member_id=?";
-					Connection bookConn = DataSourceManager.BOOK.getDs().getConnection();
-					memberPs = bookConn.prepareStatement(sql);
-					memberPs.setString(1, id);
-					rs = memberPs.executeQuery();
-					while (rs.next()) {
-						m.borrowBook(rs.getString("book_id"));
+					Connection bookConn = DataSourceManager.LIBRARY.getDs().getConnection();
+					PreparedStatement borrowPs = bookConn.prepareStatement(sql);
+					borrowPs.setString(1, id);
+					ResultSet borrowRs = borrowPs.executeQuery();
+					while (borrowRs.next()) {
+						m.borrowBook(borrowRs.getString("book_id"));
 					}
+					borrowRs.close();
+					borrowPs.close();
+					
 				} catch (SQLException e) {
 					String msg = "Got an SQLException when reading a member's borrowed list.  Member ID: " + id + ".  Error: " + e;
 					throw new MemberException(msg, e);
 				}
 				// Get the member's style data. If this doen't succeed the application should be able to continue
 				try {
-					styleCon = DataSourceManager.STYLE.getDs().getConnection();
+					styleCon = DataSourceManager.LIBRARY.getDs().getConnection();
 					sql = "SELECT * from style WHERE member_id=?";
 					stylePs = styleCon.prepareStatement(sql);
 					stylePs.setString(1, m.getMemberId());
-					rs = stylePs.executeQuery();
+					ResultSet styleRs = stylePs.executeQuery();
 					if (rs.next()) {
-						m.setBackgroundColor(rs.getString("bgcolor"));
-						m.setForegroundColor(rs.getString("fgcolor"));
+						m.setBackgroundColor(styleRs.getString("bgcolor"));
+						m.setForegroundColor(styleRs.getString("fgcolor"));
 					}
 				} catch (SQLException e) {
 					log.log(Level.SEVERE, "Got an SQLException when reading a members style.  id: "
@@ -213,7 +217,7 @@ public class MembersJdbcImpl implements IMember {
 		Connection con = null;
 		PreparedStatement ps = null;
 		try {
-			con = DataSourceManager.MEMBER.getDs().getConnection();
+			con = DataSourceManager.LIBRARY.getDs().getConnection();
 			String sql = "DELETE from member WHERE member_id=?";
 			ps = con.prepareStatement(sql);
 			ps.setString(1, id);

@@ -45,13 +45,13 @@ public class BuildDatabases extends HttpServlet {
 			//log.log(Level.INFO, "init db request from server " + org.apache.catalina.util.ServerInfo.getServerInfo());
 			try {
 				DatabaseStructureUtil
-						.initializeMemberDatabase(DataSourceManager.MEMBER
+						.initializeMemberDatabase(DataSourceManager.LIBRARY
 								.getDs());
 				DatabaseStructureUtil
-						.initializeStyleDatabase(DataSourceManager.STYLE
+						.initializeStyleDatabase(DataSourceManager.LIBRARY
 								.getDs());
 				DatabaseStructureUtil
-						.initializeBookDatabase(DataSourceManager.BOOK.getDs());
+						.initializeBookDatabase(DataSourceManager.LIBRARY.getDs());
 				request.setAttribute(WebAttributes.RETURN_MESSAGE.toString(),
 						"Databases created.");
 			} catch (Exception e) {

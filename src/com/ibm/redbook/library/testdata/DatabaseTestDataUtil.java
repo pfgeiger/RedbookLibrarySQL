@@ -97,10 +97,11 @@ public class DatabaseTestDataUtil {
 	}
 
 	public static void populateBookDatabase(DataSource bookDataSource) throws BookException {
-		log.log(Level.INFO, "TEST data style creation request");
+		log.log(Level.INFO, "TEST data book creation request");
 		Connection con = null;
 		String sql = null;
 		PreparedStatement ps = null;
+		PreparedStatement borrowPs = null;
 		try {
 			try {
 				con = bookDataSource.getConnection();
@@ -110,48 +111,31 @@ public class DatabaseTestDataUtil {
 						+ e.getMessage();
 				throw new BookException(msg, e);
 			}
+
 			try {
 				sql = "INSERT INTO book ("
 						+ "id, name, description, quantity) VALUES (?,?,?,?)";
 				ps = con.prepareStatement(sql);
-
+				
 				ps.setString(1, "1");
 				ps.setString(2, "WebSphere Application Server V7 Flexible Management: Security Configuration Requirements");
-				ps.setString(3, "IBM® WebSphere\u00ae Application Server V7 introduces an administration function called that is designed to facilitate administration of many WebSphere Application Server stand-alone profiles and Federated Network Deployment topologies.");
+				ps.setString(3, "IBMï¿½ WebSphere\u00ae Application Server V7 introduces an administration function called that is designed to facilitate administration of many WebSphere Application Server stand-alone profiles and Federated Network Deployment topologies.");
 				ps.setInt(4, 10);
 				ps.execute();
-			} catch (SQLException e) {
-				log.log(Level.SEVERE, e.getMessage(), e);
-				String msg = "Failed to insert data into the book table. Got an SQLException: "
-						+ e.getMessage();
-				throw new BookException(msg, e);
-			}
-			try {
-				sql = "INSERT INTO book ("
-						+ "id, name, description, quantity) VALUES (?,?,?,?)";
-				ps = con.prepareStatement(sql);
+
 
 				ps.setString(1, "2");
 				ps.setString(2, "WebSphere Application Server V8: Administration and Configuration Guide");
 				ps.setString(3, "This IBM\u00ae Redbooks\u00ae publication provides system administrators and developers with the knowledge to configure an IBM WebSphere\u00ae Application Server Version 8 runtime environment, to package and deploy applications, and to perform ongoing management of the WebSphere environment.");
 				ps.setInt(4, 0);
 				ps.execute();
-			} catch (SQLException e) {
-				log.log(Level.SEVERE, e.getMessage(), e);
-				String msg = "Failed to insert data into the book table. Got an SQLException: "
-						+ e.getMessage();
-				throw new BookException(msg, e);
-			}
-			try {
-				sql = "INSERT INTO book ("
-						+ "id, name, description, quantity) VALUES (?,?,?,?)";
-				ps = con.prepareStatement(sql);
 				
 				ps.setString(1, "3");
 				ps.setString(2, "WebSphere Application Server: New Features in V8.5");
 				ps.setString(3, "WebSphere Application Server can help businesses offer richer user experiences through the rapid delivery of innovative applications. Developers can jumpstart development efforts and leverage existing skills by selecting from the comprehensive set of open standards-based programming models supported.");
 				ps.setInt(4, 1);
 				ps.execute();
+
 			} catch (SQLException e) {
 				log.log(Level.SEVERE, e.getMessage(), e);
 				String msg = "Failed to insert data into the book table. Got an SQLException: "
@@ -162,25 +146,14 @@ public class DatabaseTestDataUtil {
 			try {
 				sql = "INSERT INTO borrowed_list ("
 						+ "member_id, book_id) VALUES (?,?)";
-				ps = con.prepareStatement(sql);
-				ps.setString(1, "user1");
-				ps.setString(2, "1");
-
-				ps.execute();
-			} catch (SQLException e) {
-				log.log(Level.SEVERE, e.getMessage(), e);
-				String msg = "Failed to insert data into the borrowed_list table. Got an SQLException: "
-						+ e.getMessage();
-				throw new BookException(msg, e);
-			}
-			try {
-				sql = "INSERT INTO borrowed_list ("
-						+ "member_id, book_id) VALUES (?,?)";
-				ps = con.prepareStatement(sql);
-				ps.setString(1, "user1");
-				ps.setString(2, "3");
-
-				ps.execute();
+				borrowPs = con.prepareStatement(sql);
+				borrowPs.setString(1, "user1");
+				borrowPs.setString(2, "1");
+				borrowPs.executeUpdate();
+				
+				borrowPs.setString(1, "user1");
+				borrowPs.setString(2, "3");
+				borrowPs.executeUpdate();
 			} catch (SQLException e) {
 				log.log(Level.SEVERE, e.getMessage(), e);
 				String msg = "Failed to insert data into the borrowed_list table. Got an SQLException: "
@@ -192,6 +165,7 @@ public class DatabaseTestDataUtil {
 			
 		} finally {
 			JdbcUtils.closeConnectionAndPS(con, ps);
+			JdbcUtils.closeStatement(borrowPs);
 		}
 
 	}

@@ -38,6 +38,8 @@
 					.lookup("java:comp/env/inTesting"))) {
 				out.println("<li><a href='test/BuildDatabases'>Build The Databases</a></li>");
 				out.println("<li><a href='test/PopulateTestData'>Populate the Database with test data</a></li>");
+				out.println("<li><a href='test/DumpTables'>Dump the Table Contents</a></li>");
+				
 			}
 		%>
 	</ul>
