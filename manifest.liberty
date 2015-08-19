@@ -3,5 +3,6 @@ applications:
   memory: 512M
   path: RedbookLibrary.war
   host: redbook-library
+  buildpack: liberty-for-java 
 services:
  - library_db
