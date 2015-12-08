@@ -5,4 +5,4 @@ applications:
   host: redbook-library
   buildpack: liberty-for-java 
   services:
-  - library_db
+  - redbooklib-SQLDB

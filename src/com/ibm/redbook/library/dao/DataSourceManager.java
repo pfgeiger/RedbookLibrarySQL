@@ -13,7 +13,7 @@ import com.ibm.redbook.library.exceptions.DataSourceException;
  * Convenience class used to get access to the different data sources used in the application.
  */
 public enum DataSourceManager {
-	LIBRARY("jdbc/library_db");
+	LIBRARY("jdbc/redbooklib-SQLDB");
 	Logger log = Logger.getLogger(getClass().getName());
 	private String dsName = "";
 
