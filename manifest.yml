@@ -1,3 +1,8 @@
+---
+declared-services:
+  redbooklib-SQLDB:
+    label: sqldb
+    plan: sqldb_free
 applications:
 - name: redbooklibrary
   memory: 512M
@@ -5,4 +10,4 @@ applications:
   host: redbook-library
   buildpack: liberty-for-java 
   services:
-  - library_db
+  - redbooklib-SQLDB
