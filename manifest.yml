@@ -1,8 +1,3 @@
----
-declared-services:
-  redbooklib-SQLDB:
-    label: sqldb
-    plan: sqldb_free
 applications:
 - name: redbooklibrary
   memory: 512M
