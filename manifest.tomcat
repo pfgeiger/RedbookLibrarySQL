@@ -1,6 +1,0 @@
-applications:
-- name: redbooklibrary
-  memory: 512M
-  path: RedbookLibrary.war
-  host: redbook-library
-  buildpack: java_buildpack
