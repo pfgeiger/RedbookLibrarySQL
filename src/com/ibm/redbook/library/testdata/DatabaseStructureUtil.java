@@ -63,12 +63,12 @@ public class DatabaseStructureUtil {
 			try {
 				sql = "CREATE TABLE book (" + "id varchar(32) not null,"
 						+ "name varchar(128)," + "description varchar(512),"
-						+ "quantity int," + "primary key (id))";
+						+ "quantity int," + "primary key (id)) ORGANIZE BY ROW";
 				ps = con.prepareStatement(sql);
 				ps.execute();
 			} catch (SQLException e) {
 				log.log(Level.SEVERE, e.getMessage(), e);
-				String msg = "Failed to create tabel 'book'. Got an SQLException: "
+				String msg = "Failed to create table 'book'. Got an SQLException: "
 						+ e.getMessage();
 				throw new BookException(msg, e);
 			} finally {
@@ -80,7 +80,7 @@ public class DatabaseStructureUtil {
 						+ "member_id varchar(32) not null,"
 						+ "book_id varchar(32) not null,"
 						+ "primary key (member_id, book_id), "
-						+ "FOREIGN KEY (book_id)" + "REFERENCES book (id))";
+						+ "FOREIGN KEY (book_id)" + "REFERENCES book (id)) ORGANIZE BY ROW";
 				ps = con.prepareStatement(sql);
 				ps.execute();
 			} catch (SQLException e) {
@@ -127,7 +127,7 @@ public class DatabaseStructureUtil {
 			try {
 				sql = "CREATE TABLE member (" + "id varchar(32) not null,"
 						+ "password varchar(255) not null,"
-						+ "primary key (id))";
+						+ "primary key (id)) ORGANIZE BY ROW";
 				ps = con.prepareStatement(sql);
 				ps.execute();
 			} catch (SQLException e) {
@@ -179,7 +179,7 @@ public class DatabaseStructureUtil {
 				sql = "CREATE TABLE style ("
 						+ "member_id varchar(32) not null,"
 						+ "bgcolor varchar(255)," + "fgcolor varchar(255),"
-						+ "primary key (member_id))";
+						+ "primary key (member_id))  ORGANIZE BY ROW";
 				ps = con.prepareStatement(sql);
 				ps.execute();
 			} catch (SQLException e) {
